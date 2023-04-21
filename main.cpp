@@ -11,6 +11,9 @@ struct Process{
     int Remaining_Time ;
 
 };
+void welcome (){
+
+}
 int main (){
     cout<<"Hello World" <<endl;
     return  0;

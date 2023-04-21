@@ -276,7 +276,7 @@ void displayMenu()
                     processes.push_back(p);
                 }
 
-                FCFS(processes); // call the FCFS function here
+                FCFS(processes); //call the FCFS function here
                 break;
             case 2:
                 cout << "Shortest Job First :NON_Preemptive";

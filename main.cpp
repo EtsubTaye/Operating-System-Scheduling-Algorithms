@@ -8,7 +8,7 @@ struct Process{
     int Burst_Time;
     int Waiting_Time;
     int Turn_Around_Time;
-    int rt;
+    int Remaining_Time ;
 
 };
 int main (){

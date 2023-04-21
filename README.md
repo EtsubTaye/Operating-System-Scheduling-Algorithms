@@ -34,6 +34,6 @@ This algorithm schedules processes based on their priority level, with higher pr
 
 After the user selects a scheduling algorithm, the program will generate a random process table with the specified number of processes and display the results of the scheduling algorithm in the form of a Gantt chart.
 
-## License
+#Addis Abeba 2023
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+ 

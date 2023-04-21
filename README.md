@@ -1,4 +1,4 @@
-Sure, here's a simpler version of the README file for the C++ program that performs OS scheduling algorithms:
+
 
 # OS Scheduling Algorithms
 

@@ -145,91 +145,94 @@ void SJF_NP(vector<Process> processes)
     cout << "Average waiting time: " << avg_wait_time << " ms" << endl;
     cout << "Average turnaround time: " << avg_turnaround_time << " ms" << endl;
 }
-void SJF_P(vector<Process> processes){
-    // sort processes by arrival time
-    sort(processes.begin(), processes.end(), [](const Process &a, const Process &b)
-    { return a.Arrival_Time < b.Arrival_Time; });
+void SJF_P(vector<Process>& processes)  {
+        // sort processes by arrival time and then by burst time
+        sort(processes.begin(), processes.end(), [](const Process &a, const Process &b) {
+            if (a.Arrival_Time == b.Arrival_Time) {
+                return a.Burst_Time < b.Burst_Time;
+            }
+            return a.Arrival_Time < b.Arrival_Time;
+        });
 
-    // initialize variables
-    int current_time = 0;
-    int completed_processes = 0;
-    vector<Process> ready_queue;
-    Process current_process;
+        // calculate waiting time, turnaround time, and completion time for each process
+        int total_wait_time = 0, total_turnaround_time = 0, current_time = 0, min_burst_time;
+        vector<int> remaining_burst_time(processes.size(), 0);
+        for (int i = 0; i < processes.size(); i++) {
+            remaining_burst_time[i] = processes[i].Burst_Time;
+        }
 
-    // loop until all processes are completed
-    while (completed_processes < processes.size())
-    {
-        // add newly arrived processes to the ready queue
-        for (int i = 0; i < processes.size(); i++)
-        {
-            if (processes[i].Arrival_Time <= current_time && processes[i].Remaining_Time > 0)
-            {
-                bool found = false;
-                for (int j = 0; j < ready_queue.size(); j++)
-                {
-                    if (ready_queue[j].Process_Id == processes[i].Process_Id)
-                    {
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found)
-                {
-                    ready_queue.push_back(processes[i]);
+        vector<int> completion_time(processes.size(), 0), start_time(processes.size(), 0);
+        int completed = 0;
+        while (completed != processes.size()) {
+            min_burst_time = INT_MAX;
+            int min_index = -1;
+            for (int i = 0; i < processes.size(); i++) {
+                if (remaining_burst_time[i] > 0 && remaining_burst_time[i] < min_burst_time &&
+                    processes[i].Arrival_Time <= current_time) {
+                    min_burst_time = remaining_burst_time[i];
+                    min_index = i;
                 }
             }
+            if (min_index == -1) {
+                current_time++;
+                continue;
+            }
+            remaining_burst_time[min_index]--;
+
+            if (remaining_burst_time[min_index] == 0) {
+                completed++;
+                completion_time[min_index] = current_time + 1;
+                processes[min_index].Turn_Around_Time = completion_time[min_index] - processes[min_index].Arrival_Time;
+                processes[min_index].Waiting_Time =
+                        processes[min_index].Turn_Around_Time - processes[min_index].Burst_Time;
+                if (processes[min_index].Waiting_Time < 0) {
+                    processes[min_index].Waiting_Time = 0;
+                }
+                total_wait_time += processes[min_index].Waiting_Time;
+                total_turnaround_time += processes[min_index].Turn_Around_Time;
+            }
+            current_time++;
+            start_time[min_index] = current_time - remaining_burst_time[min_index];
         }
 
-        // select the process with the shortest remaining time from the ready queue
-        if (ready_queue.size() > 0)
-        {
-            sort(ready_queue.begin(), ready_queue.end(), [](const Process &a, const Process &b)
-            { return a.Remaining_Time < b.Remaining_Time; });
+        // calculate average waiting time and turnaround time
+        double avg_wait_time = (double) total_wait_time / processes.size();
+        double avg_turnaround_time = (double) total_turnaround_time / processes.size();
 
-            // check if the current process should be preempted
-            if (current_process.Process_Id != ready_queue[0].Process_Id)
-            {
-                current_process.Remaining_Time = current_process.Completion_Time - current_time;
-                ready_queue.push_back(current_process);}
-            current_process = ready_queue[0];
-            ready_queue.erase(ready_queue.begin());
+        // display process table
+        cout << "+-----+--------------+------------+------------------+---------------------+---------------------+"
+             << endl;
+        cout << "| PID | Arrival Time | Burst Time | Waiting Time (ms) | Turnaround Time (ms) | Completion Time (ms) |"
+             << endl;
+        cout << "+-----+--------------+------------+------------------+---------------------+---------------------+"
+             << endl;
+        for (int i = 0; i < processes.size(); i++) {
+            printf("| %-3d |      %-7d |     %-6d |        %-9d |          %-11d |          %-11d |\n",
+                   processes[i].Process_Id, processes[i].Arrival_Time, processes[i].Burst_Time,
+                   processes[i].Waiting_Time, processes[i].Turn_Around_Time, completion_time[i]);
+        }
+        cout << "+-----+--------------+------------+------------------+---------------------+---------------------+"<< endl;
 
-            // update waiting time for all processes in the ready queue
-            for (int i = 0; i < ready_queue.size(); i++)
-            {
-                ready_queue[i].Waiting_Time += current_time - ready_queue[i].Completion_Time;
+
+        // display Gantt chart
+        cout << "Gantt Chart:" << endl;
+        cout << "+";
+        for (int i = 0; i < processes[0].Arrival_Time; i++) {
+            cout << "---+";
+        }
+        for (int i = 0; i < processes.size(); i++) {
+            cout << "---+";
+            for (int j = 0; j < processes[i].Burst_Time; j++) {
+                cout << " " << processes[i].Process_Id << " |";
             }
         }
+        cout << endl;
 
-        // execute the current process for 1 time unit
-        current_process.Remaining_Time--;
-        current_time++;
-
-        // check if the current process is completed
-        if (current_process.Remaining_Time == 0)
-        {
-            current_process.Completion_Time = current_time;
-            current_process.Turn_Around_Time = current_process.Completion_Time - current_process.Arrival_Time;
-            current_process.Waiting_Time = current_process.Turn_Around_Time - current_process.Burst_Time;
-            if (current_process.Waiting_Time < 0)
-            {
-                current_process.Waiting_Time = 0;
-            }
-            completed_processes++;
-        }
+        // display average waiting time and turnaround time
+        cout << "Average waiting time: " << avg_wait_time << " ms" << endl;
+        cout << "Average turnaround time: " << avg_turnaround_time << " ms" << endl;
     }
 
-    // calculate average waiting time and turnaround time
-    int total_wait_time = 0, total_turnaround_time = 0;
-    for (int i = 0; i < processes.size(); i++)
-    {
-        total_wait_time += processes[i].Waiting_Time;
-        total_turnaround_time += processes[i].Turn_Around_Time;
-    }
-    double avg_wait_time = (double)total_wait_time / processes.size();
-    double avg_turnaround_time = (double)total_turnaround_time / processes.size();
-
-}
 
 void displayMenu()
 {
@@ -304,27 +307,29 @@ void displayMenu()
                 break;
 
             case 3:
-                cout << "Shortest Job First : Preemptive";
-                cout << "Enter the number of processes: ";
+                cout << "Shortest Job First : Preemptive" << endl;
+                cout << "Enter the number of processes : ";
                 cin >> num_processes;
-                 for (int i = 0 ; i < num_processes ;i++){
-                     Process p;
-                     p.Process_Id = i + 1;
+                for (int i = 0 ; i < num_processes ;i++){
+                    Process p;
+                    p.Process_Id = i + 1;
 
-                     cout << "Enter the arrival time of process " << p.Process_Id << ": ";
-                     cin >> p.Arrival_Time;
+                    cout << "Enter the arrival time of process " << p.Process_Id << ": ";
+                    cin >> p.Arrival_Time;
 
-                     cout << "Enter the burst time of process " << p.Process_Id << ": ";
-                     cin >> p.Burst_Time;
+                    cout << "Enter the burst time of process " << p.Process_Id << ": ";
+                    cin >> p.Burst_Time;
 
-                     p.Remaining_Time = p.Burst_Time;
+                    p.Remaining_Time = p.Burst_Time;
 
-                     processes.push_back(p);
-                 }
-
+                    processes.push_back(p);
+                }
+                // Call the SJF_P() function here
                 SJF_P(processes);
-                break;
 
+            default:
+                cout << "Invalid choice" << endl;
+                break;
             case 4:
                 // Call function for Round Robin algorithm
                 break;
@@ -334,9 +339,9 @@ void displayMenu()
             case 6:
                 // Exit program
                 exit(0);
-            default:
-                cout << "Invalid choice. Please try again." << endl;
-                break;
+
+               // cout << "Invalid choice. Please try again." << endl;
+              //  break;
         }
     }
 }

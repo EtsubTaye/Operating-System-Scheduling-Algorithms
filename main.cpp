@@ -194,7 +194,7 @@ void preemptiveSJFScheduling() {
     cout << "| PID | Arrival Time | Burst Time | Completion Time | Waiting Time | Turnaround Time |\n";
     cout << "---------------------------------------------------------------------------------------\n";
     cout << "Gantt Chart:\n";
-    cout << "------------------------------------------------------------------\n";
+    cout << "----------------------------------------------------------------------\n";
     while (completedProcesses < n) {
         int shortestJobIndex = -1;
         int shortestJobBurstTime = INT_MAX;

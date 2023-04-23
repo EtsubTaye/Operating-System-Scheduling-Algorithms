@@ -2,8 +2,9 @@
 #include <vector>
 #include <queue>
 #include <iomanip>
+#include <algorithm>
 
-using namespace std;
+ using namespace std;
 
 // Process struct to store process details
 struct Process {
@@ -184,7 +185,7 @@ void preemptiveSJFScheduling() {
         processes[i] = {i + 1, arrivalTime, burstTime, 0, burstTime, 0, 0, false};
     }
 
-    sort(processes.begin(), processes.end(), CompareArrivalTime());
+     sort(processes.begin(), processes.end(), CompareArrivalTime());
 
     int currentTime = 0;
     double totalWaitTime = 0;
@@ -363,5 +364,4 @@ void Display_Menu(){
     }
 int main (){
     Display_Menu();
-
 }

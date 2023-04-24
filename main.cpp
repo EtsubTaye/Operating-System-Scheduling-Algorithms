@@ -356,6 +356,15 @@ void priorityScheduling(){
     cout << "Average turnaround time: " << total_turnaround_time / n << endl;
 
 }
+ void displayProjectInfo() {
+     cout << "Welcome to our project!\n\n";
+     cout << "Project Members:\n";
+     cout << "----------------\n";
+     cout << "ID\tFull Name\n";
+     cout << "YY6504\tEtsub Yidenkaher\n";
+     cout << "EE4321\tKidist Abynehe\n";
+     cout << "TT3342\tNoah B\n";
+ }
 
 
 void Display_Menu(){
@@ -369,6 +378,7 @@ void Display_Menu(){
             cout << "4. Round Robin (RR)\n";
             cout << "5. Priority Scheduling\n";
             cout << "6. Exit\n";
+            cout <<"7. Project Information \n";
             cout << "Enter your choice: ";
             cin >> choice;
             switch (choice) {
@@ -389,7 +399,10 @@ void Display_Menu(){
                     break;
                 case 6:
                     cout << "Exiting...\n";
-                    return;
+                    break;
+                case 7:
+                     displayProjectInfo();
+                    break;
                 default:
                     cout << "Invalid choice, please try again.\n";
                     break;

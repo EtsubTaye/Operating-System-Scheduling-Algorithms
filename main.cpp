@@ -321,6 +321,13 @@ void priorityScheduling(){
     int n ;
     cout<<"< Priority Scheduling Algo >"<<endl;
     cout<<"Enter the number of products "<<endl;
+    cin >> n ;
+    Process p[n]; /// the size of the vector
+ for (int i = 0 ; i < n ; i++){
+     cout<< "Enter the number of Process Id"<<endl;
+     cin>>p[i].id;
+
+ }
 
 }
 void Display_Menu(){
@@ -350,7 +357,7 @@ void Display_Menu(){
                     roundRobinScheduling();
                     break;
                 case 5:
-                    // Call Priority Scheduling function
+                    priorityScheduling();
                     break;
                 case 6:
                     cout << "Exiting...\n";

@@ -323,13 +323,19 @@ void priorityScheduling(){
     cout<<"Enter the number of products "<<endl;
     cin >> n ;
     Process p[n]; /// the size of the vector
- for (int i = 0 ; i < n ; i++){
-     cout<< "Enter the number of Process Id"<<endl;
-     cin>>p[i].id;
+ for (int i = 0 ; i < n ; i++) {
+     cout << "Enter the  Id for Process  : " << i + 1 << endl;
+     cin >> p[i].id;
+     cout << "Enter the Burst time of Process : " << i + 1 << endl;
+     cin >> p[i].burstTime;
+     cout << "Enter the Priority Tag of Process : " << i + 1 << endl;
+     cin >> p[i].priority;
+ }
+ sort
 
  }
 
-}
+
 void Display_Menu(){
 
         int choice;

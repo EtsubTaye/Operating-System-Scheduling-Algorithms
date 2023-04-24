@@ -19,21 +19,18 @@ struct Process {
     int initialBurstTime;
     bool completed;
 };
-
 // Comparator struct for priority queue based on process priority
 struct ComparePriority {
     bool operator()(const Process& p1, const Process& p2) {
         return p1.priority > p2.priority;
     }
 };
-
 // Comparator struct for sorting processes based on arrival time
 struct CompareArrivalTime {
     bool operator()(const Process& p1, const Process& p2) {
         return p1.arrivalTime < p2.arrivalTime;
     }
 };
-
 // Function to print the process table
 void printTable(vector<Process>& processes) {
     cout << "Process ID\tArrival Time\tBurst Time\tCompletion Time\tWaiting Time\tTurnaround Time\n";
@@ -43,8 +40,6 @@ void printTable(vector<Process>& processes) {
              << setw(12) << processes[i].waitingTime << "\t" << setw(15) << processes[i].turnaroundTime << endl;
     }
 }
-
-
 // First-Come, First-Served scheduling algorithm
 void fcfsScheduling() {
     // Create vector of processes
@@ -116,7 +111,6 @@ void fcfsScheduling() {
     cout << "Average Waiting Time: " << avgWaitingTime << endl;
     cout << "Average Turnaround Time: " << avgTurnaroundTime << endl;
 }
-
 void sjfNPScheduling() {
     int n;
     cout << "Enter number of processes: ";
@@ -323,8 +317,12 @@ void roundRobinScheduling() {
         cout << "------------------------------------------------------------" << endl;
     }
 }
+void priorityScheduling(){
+    int n ;
+    cout<<"< Priority Scheduling Algo >"<<endl;
+    cout<<"Enter the number of products "<<endl;
 
-
+}
 void Display_Menu(){
 
         int choice;

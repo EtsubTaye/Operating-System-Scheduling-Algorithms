@@ -331,9 +331,31 @@ void priorityScheduling(){
      cout << "Enter the Priority Tag of Process : " << i + 1 << endl;
      cin >> p[i].priority;
  }
- sort
+    sort(p, p + n, [](const Process& a, const Process& b) {
+        return a.priority < b.priority;
+    });
+    int current_time = 0;
+    cout << "Gant chart: ";
+    for (int i = 0; i < n; i++) {
+        current_time += p[i].burstTime;
+        cout << p[i].id << " ";
+    }
+    cout << endl;
 
- }
+    double total_waiting_time = 0, total_turnaround_time = 0;
+    cout << "Process\tBurst time\tWaiting time\tTurnaround time\n";
+    for (int i = 0; i < n; i++) {
+        int waiting_time = current_time - p[i].burstTime;
+        total_waiting_time += waiting_time;
+        total_turnaround_time += waiting_time + p[i].burstTime;
+        int turnaround_time = waiting_time + p[i].burstTime;
+        cout << p[i].id << "\t" << p[i].burstTime << "\t\t" << waiting_time << "\t\t" << turnaround_time << endl;
+    }
+
+    cout << "Average waiting time: " << total_waiting_time / n << endl;
+    cout << "Average turnaround time: " << total_turnaround_time / n << endl;
+
+}
 
 
 void Display_Menu(){

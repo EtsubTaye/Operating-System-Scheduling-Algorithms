@@ -60,6 +60,7 @@ void fcfsScheduling() {
         cout<<"Enter Burst time for "<<i+1<<":";
         cin>>burstTime;
         // Initialize process details
+        //more on for push
         processes[i] = {i+1, arrivalTime, burstTime, 0, burstTime, 0, 0};
     }
 

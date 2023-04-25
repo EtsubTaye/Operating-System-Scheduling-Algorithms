@@ -307,7 +307,7 @@ void roundRobinScheduling() {
 void priorityScheduling(){
     int n ;
     cout<<"< Priority Scheduling Algo >"<<endl;
-    cout<<"Enter the number of Processes "<<endl;
+    cout<<"Enter the number of Processes :  "<<endl;
     cin >> n ;
     Process p[n]; /// the size of the vector
  for (int i = 0 ; i < n ; i++) {

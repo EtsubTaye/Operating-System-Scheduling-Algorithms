@@ -345,7 +345,7 @@ void priorityScheduling(){
 }
 void displayProjectInfo() {
      cout << "Welcome to our project!\n\n";
-     cout << "Project Members:\n";
+     cout << "Project Members: DRB-2002\n";
      cout << "----------------\n";
      cout << "ID\tFull Name\n";
      cout << "YY6504\tEtsub Yidenkaher\n";

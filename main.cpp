@@ -15,31 +15,18 @@ struct Process {
     int remainingTime;
     int waitingTime;
     int turnaroundTime;
-    int compl_time;
+    int completion_time;
     int initialBurstTime;
     bool completed;
 };
 // Comparator struct for priority queue based on process priority
-struct ComparePriority {
-    bool operator()(const Process& p1, const Process& p2) {
-        return p1.priority > p2.priority;
-    }
-};
+
 // Comparator struct for sorting processes based on arrival time
 struct CompareArrivalTime {
     bool operator()(const Process& p1, const Process& p2) {
         return p1.arrivalTime < p2.arrivalTime;
     }
 };
-// Function to print the process table
-void printTable(vector<Process>& processes) {
-    cout << "Process ID\tArrival Time\tBurst Time\tCompletion Time\tWaiting Time\tTurnaround Time\n";
-    for (int i = 0; i < processes.size(); i++) {
-        cout << setw(10) << processes[i].id << "\t" << setw(12) << processes[i].arrivalTime << "\t"
-             << setw(9) << processes[i].burstTime << "\t" << setw(16) << processes[i].compl_time << "\t"
-             << setw(12) << processes[i].waitingTime << "\t" << setw(15) << processes[i].turnaroundTime << endl;
-    }
-}
 // First-Come, First-Served scheduling algorithm
 void fcfsScheduling() {
     // Create vector of processes
@@ -67,9 +54,9 @@ void fcfsScheduling() {
         processes[i].waitingTime = currentTime - processes[i].arrivalTime;
         currentTime += processes[i].burstTime;
         processes[i].turnaroundTime = currentTime - processes[i].arrivalTime;
-        processes[i].compl_time = currentTime;
+        processes[i].completion_time = currentTime;
         cout << processes[i].id << "\t\t" << processes[i].arrivalTime << "\t\t"
-             << processes[i].burstTime << "\t\t" << processes[i].compl_time << "\t\t\t"
+             << processes[i].burstTime << "\t\t" << processes[i].completion_time << "\t\t\t"
              << processes[i].waitingTime << "\t\t" << processes[i].turnaroundTime << endl;
     }
 
@@ -83,8 +70,8 @@ void fcfsScheduling() {
 // Display process IDs and their corresponding time intervals
     cout << "|";
     for (int i = 0; i < n; i++) {
-        int processEnd = processes[i].compl_time;
-        int processStart = (i == 0) ? 0 : processes[i - 1].compl_time;
+        int processEnd = processes[i].completion_time;
+        int processStart = (i == 0) ? 0 : processes[i - 1].completion_time;
         for (int j = processStart; j < processEnd; j++) {
             cout << " ";
         }
@@ -135,12 +122,12 @@ void sjfNPScheduling() {
         Process p = processes[i];
         totalWaitTime += currentTime - p.arrivalTime;
         currentTime = max(currentTime, p.arrivalTime);
-        p.compl_time = currentTime + p.burstTime;
-        p.turnaroundTime = p.compl_time - p.arrivalTime;
+        p.completion_time = currentTime + p.burstTime;
+        p.turnaroundTime = p.completion_time - p.arrivalTime;
         p.waitingTime = p.turnaroundTime - p.burstTime;
         currentTime += p.burstTime;
         cout << "| " << setw(3) << p.id << " | " << setw(12) << p.arrivalTime << " | " << setw(9) << p.burstTime << " | "
-             << setw(16) << p.compl_time << " | " << setw(12) << p.waitingTime << " | " << setw(15) << p.turnaroundTime << " |\n";
+             << setw(16) << p.completion_time << " | " << setw(12) << p.waitingTime << " | " << setw(15) << p.turnaroundTime << " |\n";
     }
     cout << "---------------------------------------------------------------------------------------\n";
     cout << "Average wait time: " << totalWaitTime/n << endl;
@@ -194,7 +181,7 @@ void preemptiveSJFScheduling() {
         int shortestJobIndex = -1;
         int shortestJobBurstTime = INT_MAX;
         for (int i = 0; i < n; i++) {
-            if (processes[i].arrivalTime <= currentTime && processes[i].completed == false) {
+            if (processes[i].arrivalTime <= currentTime && !processes[i].completed) {
                 if (processes[i].burstTime < shortestJobBurstTime) {
                     shortestJobBurstTime = processes[i].burstTime;
                     shortestJobIndex = i;
@@ -213,8 +200,8 @@ void preemptiveSJFScheduling() {
         if (p.burstTime == 0) {
             p.completed = true;
             completedProcesses++;
-            p.compl_time = currentTime;
-            p.turnaroundTime = p.compl_time - p.arrivalTime;
+            p.completion_time = currentTime;
+            p.turnaroundTime = p.completion_time - p.arrivalTime;
             p.waitingTime = p.turnaroundTime - p.initialBurstTime;
             totalWaitTime += p.waitingTime;
         }
@@ -224,7 +211,7 @@ void preemptiveSJFScheduling() {
         Process p = processes[i];
         cout << "| " << setw(3) << p.id << " | " << setw(12) << p.arrivalTime << " | " << setw(9) << p.initialBurstTime
              << " | "
-             << setw(16) << p.compl_time << " | " << setw(12) << p.waitingTime << " | " << setw(15) << p.turnaroundTime
+             << setw(16) << p.completion_time << " | " << setw(12) << p.waitingTime << " | " << setw(15) << p.turnaroundTime
              << " |\n";
     }
     cout << "---------------------------------------------------------------------------------------\n";
@@ -270,8 +257,8 @@ void roundRobinScheduling() {
                 } else {
                     current_time += proc[i].remainingTime;
                     proc[i].remainingTime = 0;
-                    proc[i].compl_time = current_time;
-                    proc[i].turnaroundTime = proc[i].compl_time - proc[i].arrivalTime;
+                    proc[i].completion_time = current_time;
+                    proc[i].turnaroundTime = proc[i].completion_time - proc[i].arrivalTime;
                     proc[i].waitingTime = proc[i].turnaroundTime - proc[i].burstTime;
                     cout << " P" << i+1 << " |";
                 }
@@ -295,8 +282,8 @@ void roundRobinScheduling() {
                 } else {
                     current_time += proc[i].remainingTime;
                     proc[i].remainingTime = 0;
-                    proc[i].compl_time = current_time;
-                    proc[i].turnaroundTime = proc[i].compl_time - proc[i].arrivalTime;
+                    proc[i].completion_time = current_time;
+                    proc[i].turnaroundTime = proc[i].completion_time - proc[i].arrivalTime;
                     proc[i].waitingTime = proc[i].turnaroundTime - proc[i].burstTime;
                     cout << " P" << i+1 << " |";
                 }
@@ -313,14 +300,14 @@ void roundRobinScheduling() {
     cout << "------------------------------------------------------------" << endl;
 
     for (int i = 0; i < n; i++) {
-        cout << "|    P" << i+1 << "   |      " << proc[i].arrivalTime << "      |      " << proc[i].burstTime << "     |        " << proc[i].compl_time << "       |         " << proc[i].turnaroundTime << "        |       " << proc[i].waitingTime << "      |" << endl;
+        cout << "|    P" << i+1 << "   |      " << proc[i].arrivalTime << "      |      " << proc[i].burstTime << "     |        " << proc[i].completion_time << "       |         " << proc[i].turnaroundTime << "        |       " << proc[i].waitingTime << "      |" << endl;
         cout << "------------------------------------------------------------" << endl;
     }
 }
 void priorityScheduling(){
     int n ;
     cout<<"< Priority Scheduling Algo >"<<endl;
-    cout<<"Enter the number of products "<<endl;
+    cout<<"Enter the number of Processes "<<endl;
     cin >> n ;
     Process p[n]; /// the size of the vector
  for (int i = 0 ; i < n ; i++) {
@@ -356,7 +343,7 @@ void priorityScheduling(){
     cout << "Average turnaround time: " << total_turnaround_time / n << endl;
 
 }
- void displayProjectInfo() {
+void displayProjectInfo() {
      cout << "Welcome to our project!\n\n";
      cout << "Project Members:\n";
      cout << "----------------\n";
@@ -365,9 +352,7 @@ void priorityScheduling(){
      cout << "EE4321\tKidist Abynehe\n";
      cout << "TT3342\tNoah B\n";
  }
-
-
-void Display_Menu(){
+ void Display_Menu(){
 
         int choice;
         while (true) {

@@ -1,10 +1,9 @@
- #include <iostream>
+#include <iostream>
 #include <vector>
 #include <queue>
 #include <iomanip>
 #include <algorithm>
-
- using namespace std;
+using namespace std;
 
 // Process struct to store process details
 struct Process {
@@ -20,7 +19,6 @@ struct Process {
     bool completed;
 };
 // Comparator struct for priority queue based on process priority
-
 // Comparator struct for sorting processes based on arrival time
 struct CompareArrivalTime {
     bool operator()(const Process& p1, const Process& p2) {
@@ -31,7 +29,8 @@ struct CompareArrivalTime {
 void fcfsScheduling() {
     // Create vector of processes
     int n;
-    cout << "Enter number of processes: ";
+    cout<<"<First Come First Serve >"<<endl;
+    cout<< "Enter number of processes : ";
     cin >> n;
 
     vector<Process> processes(n);
@@ -344,16 +343,15 @@ void priorityScheduling(){
 
 }
 void displayProjectInfo() {
-     cout << "Welcome to our project!\n\n";
+     cout << "Welcome to our OS project!\n\n";
      cout << "Project Members: DRB-2002\n";
      cout << "----------------\n";
      cout << "ID\tFull Name\n";
      cout << "YY6504\tEtsub Yidenkaher\n";
-     cout << "EE4321\tKidist Abynehe\n";
-     cout << "TT3342\tNoah B\n";
+     cout << "EE4321\t  \n";
+     cout << "TT3342\tNoah B \n";
  }
  void Display_Menu(){
-
         int choice;
         while (true) {
             cout << "Choose a scheduling algorithm:\n";

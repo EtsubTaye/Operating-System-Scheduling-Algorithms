@@ -99,14 +99,17 @@ void fcfsScheduling() {
 }
 void sjfNPScheduling() {
     int n;
+    cout<<"<Shortes Job First  : NON PREEMPTIVE>"<<endl;
     cout << "Enter number of processes: ";
     cin >> n;
 
     vector<Process> processes(n);
     for (int i = 0; i < n; i++) {
         int burstTime, arrivalTime;
-        cout << "Enter arrival time and burst time for process " << i+1 << ": ";
-        cin >> arrivalTime >> burstTime;
+        cout << "Enter the arrival time and burst time for process " << i+1 << ": ";
+        cin >> arrivalTime ;
+        cout <<"Enter the Burst Time for process "<<i+1<<":";
+        cin >> burstTime;
         processes[i] = {i+1, arrivalTime, burstTime, 0, burstTime, 0, 0};
     }
 
